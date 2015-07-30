@@ -18,12 +18,13 @@ tools.get(url, function(err, data) {
         throw err;
     }
 
-    console.log('Loaded:');
-    console.log(data);
+    console.log('Loaded:', data);
+
+    console.log('----');
 
     var filePath = 'demo-1.html';
     fs.writeFile(filePath, data.content, function() {
-        console.log('File created', filePath);
+        console.log('写入文件：', filePath);
     });
 });
 
