@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * demo-3
  * 指定内容抓取
@@ -17,6 +19,18 @@ var tools = require('./tools');
 
 // 目标站点，以 ZOL 壁纸为例
 var targetUrl = 'http://desk.zol.com.cn/bizhi/5699_70946_2.html';
+
+// 保存目录
+var savePath = 'demo-3/';
+
+// 支持命令行参数
+var args = [].slice.call(process.argv, 2);
+if(args[0]) {
+    targetUrl = args[0];
+}
+if(args[1]) {
+    savePath = args[1];
+}
 
 
 // digger
@@ -122,7 +136,7 @@ var digger = {
         };
     },
     // 保存文件
-    savePath: 'demo-3/',
+    savePath: savePath,
     saveContent: function(url, callback) {
         var self = this;
         var rRes = /src\s*=\s*(["'])(.+?)\1/ig;
