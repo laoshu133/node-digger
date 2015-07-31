@@ -87,10 +87,8 @@ var digger = {
             // save
             self.saveContent(ret.bigImg, function() {
                 // next
-                setTimeout(function() {
-                    self.status = 'ready';
-                    self.next();
-                });
+                self.status = 'ready';
+                self.next();
 
             });
         });
