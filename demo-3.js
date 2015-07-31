@@ -59,7 +59,6 @@ var digger = {
         if(this.status !== 'ready') {
             return;
         }
-        this.status = 'working';
 
         var self = this;
         var url = this.stack.shift();
@@ -69,6 +68,8 @@ var digger = {
 
             return;
         }
+
+        this.status = 'working';
 
         tools.get(url, function(err, data) {
             if(err) {
@@ -83,12 +84,14 @@ var digger = {
                 self.add(url);
             });
 
-
             // save
             self.saveContent(ret.bigImg, function() {
                 // next
-                self.status = 'ready';
-                self.next();
+                setTimeout(function() {
+                    self.status = 'ready';
+                    self.next();
+                });
+
             });
         });
     },
@@ -98,7 +101,7 @@ var digger = {
         var html = content.toString();
 
         // 分析列表
-        // <ul id="showImg" ..></ul>
+        // <ul id="showImg" ..>...</ul>
         var listStartIndex = html.indexOf('<ul id="showImg"');
         var listEndIndex = html.indexOf('</ul>', listStartIndex);
         var listHTML = html.slice(listStartIndex, listEndIndex);

@@ -21,7 +21,12 @@ var tools = {
 
         var cache = this.getCaches;
         if(cache[url]) {
-            callback(null, cache[url]);
+            // 异步，规避时序问题
+            process.nextTick(function() {
+                callback(null, cache[url]);
+            });
+
+            return;
         }
 
         http.get(url, function(res) {
@@ -48,13 +53,10 @@ var tools = {
             callback(err);
         });
     },
-    // 同步保存文件
     // 自动补全路径
-    writeFile: function(filePath, content) {
-        // 自动补全路径
+    mkDeepDir: function(destPath) {
         var tmpPath = '';
         var destPaths = [];
-        var destPath = path.dirname(filePath);
         var paths = destPath.replace(/\\+/g, '/').split('/');
 
         // ext. /var/tmp
@@ -71,6 +73,12 @@ var tools = {
                 fs.mkdirSync(tmpPath);
             }
         }
+    },
+    // 同步保存文件
+    writeFile: function(filePath, content) {
+        var destPath = path.dirname(filePath);
+
+        this.mkDeepDir(destPath);
 
         // 同步写入文件
         fs.writeFileSync(filePath, content);

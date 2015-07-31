@@ -72,7 +72,6 @@ var digger = {
         if(this.status !== 'ready') {
             return;
         }
-        this.status = 'working';
 
         var self = this;
         var uri = this.stack.shift();
@@ -82,6 +81,7 @@ var digger = {
 
             return;
         }
+        this.status = 'working';
 
         var url = URL.resolve(siteUrl, uri);
 
@@ -155,4 +155,5 @@ digger.add(siteUrl);
 // 1. 所有外部资源均为加载，大部分CDN均为外部资源
 // 2. CSS 文件未分析
 // 3. 路径最大深度限制
-// 4. ...
+// 4. 抓到内容以后拿来干什么？！！
+// 5. ...
