@@ -7,6 +7,7 @@
 var fs = require('fs');
 var path = require('path');
 var http = require('http');
+var Iconv = require('iconv').Iconv;
 
 var tools = {
     getCaches: {},
@@ -16,7 +17,7 @@ var tools = {
      * @param  {Function} callback [description]
      * @return {Void}            [description]
      */
-    get: function(url, callback) {
+    get: function(url, callback, encoding) {
         url = url.replace(/#.+$/, '');
 
         var cache = this.getCaches;
@@ -33,7 +34,19 @@ var tools = {
             var data = [];
             var dataLen = 0;
 
+            var iconv;
+            if(encoding) {
+                iconv = new Iconv(encoding, 'utf-8');
+            }
+
             res.on('data', function(chunk) {
+                if(iconv) {
+                    try {
+                        chunk = iconv.convert(chunk);
+                    }
+                    catch(ex) {}
+                }
+
                 dataLen += chunk.length;
                 data.push(chunk);
             })
